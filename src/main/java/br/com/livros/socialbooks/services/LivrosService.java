@@ -18,10 +18,7 @@ public class LivrosService {
 		
 		return livrosRepository.findAll();
 		
-	}
-	
-	
-	
+	}	
 
 	public Livro salvar(Livro livro) {
 		livro.setId(null);
@@ -37,11 +34,23 @@ public class LivrosService {
 	}
 	
 	public void atualizar(Livro livro) {
-		//verificarExistencia(livro);
+		
+		verificarExistencia(livro.getId());
+		
+		if (verificarExistencia(livro.getId()) == null) {
+			
+			throw new LivroNaoEncontradoException("O livro não pôde ser encontrado.");
+					
+		}
+		
+		
 		livrosRepository.save(livro);
 	}
 	
-	
+	private Livro verificarExistencia(Long id) {
+		
+		return livrosRepository.getById(id);
+	}
 	
 
 }

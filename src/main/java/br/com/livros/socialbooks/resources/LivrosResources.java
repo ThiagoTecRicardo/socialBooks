@@ -17,7 +17,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import br.com.livros.socialbooks.domain.Livro;
 import br.com.livros.socialbooks.repository.LivrosRepository;
 import br.com.livros.socialbooks.services.LivrosService;
-import br.com.livros.socialbooks.services.exceptions.LivroNaoEncontradoException;
 
 @RestController
 @RequestMapping("/livros")
@@ -25,7 +24,7 @@ public class LivrosResources {
 
 	@Autowired
 	private LivrosService livrosService;
-	
+
 	@Autowired
 	private LivrosRepository livrosRepository;
 
@@ -45,27 +44,22 @@ public class LivrosResources {
 		return ResponseEntity.created(uri).build();
 	}
 
-	@RequestMapping(value = "/{id}" , method = RequestMethod.GET)
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Livro> buscar(@PathVariable Long id) {
-		
+
 		Optional<Livro> livro = livrosRepository.findById(id);
-		
-		if(livro.isEmpty()) {
+
+		if (livro.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
-		
+
 		return ResponseEntity.ok(livro.get());
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> deletar(@PathVariable Long id) {
 
-		try {
-			livrosService.deletar(id);
-		} catch (LivroNaoEncontradoException e) {
-
-			return ResponseEntity.notFound().build();
-		}
+		livrosService.deletar(id);
 
 		return ResponseEntity.noContent().build();
 
@@ -75,16 +69,8 @@ public class LivrosResources {
 	public ResponseEntity<Void> atualizar(@RequestBody Livro livro, @PathVariable Long id) {
 
 		livro.setId(id);
-		
-		try {
-			
-			livrosService.atualizar(livro);
-			
-		} catch (LivroNaoEncontradoException e) {
-		
-			return ResponseEntity.notFound().build();
-		}
-		
+
+		livrosService.atualizar(livro);
 
 		return ResponseEntity.noContent().build();
 

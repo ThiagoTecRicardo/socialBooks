@@ -44,8 +44,16 @@ public class LivrosResources {
 	@RequestMapping(value = "/{id}" , method = RequestMethod.DELETE)
 	public void deletar(@PathVariable Long id) {
 		
-		livrosRepository.deleteById(id);
+		livrosRepository.deleteById(id);	
 		
+	}
+	
+	@RequestMapping(value = "/{id}" , method = RequestMethod.PUT)
+	public void deletar(@RequestBody Livro livro, @PathVariable Long id ) {
+		
+		livro.setId(id);
+		
+		livrosRepository.save(livro);
 		
 	}
 

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import br.com.livros.socialbooks.domain.Autor;
 import br.com.livros.socialbooks.repository.AutoresRepository;
-import br.com.livros.socialbooks.services.exceptions.AutorNaoEncontradoException;
 
 @Service
 public class AutoresServices {
@@ -33,11 +32,6 @@ public class AutoresServices {
 		
 		Autor autor = autoresRepository.getById(id);
 		
-		if(autor == null) {
-			
-			throw new AutorNaoEncontradoException("O autor não pode ser encontrado.");
-			
-		}
 		
 		return autor;
 		

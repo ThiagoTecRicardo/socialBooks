@@ -7,8 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -26,7 +27,9 @@ public class Livro {
 	private String nome;
 
 	@JsonInclude(Include.NON_NULL)
-	private String autor;
+	@ManyToOne
+	@JoinColumn(name = "AUTOR_ID" )
+	private Autor autor;
 
 	@JsonInclude(Include.NON_NULL)
 	private Date publicacao;
@@ -61,11 +64,13 @@ public class Livro {
 		this.nome = nome;
 	}
 
-	public String getAutor() {
+	
+
+	public Autor getAutor() {
 		return autor;
 	}
 
-	public void setAutor(String autor) {
+	public void setAutor(Autor autor) {
 		this.autor = autor;
 	}
 

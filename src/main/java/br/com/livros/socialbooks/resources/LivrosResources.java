@@ -3,10 +3,12 @@ package br.com.livros.socialbooks.resources;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,14 +35,18 @@ public class LivrosResources {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<Livro>> listar() {
+		
+		CacheControl cacheControl = CacheControl.maxAge(20, TimeUnit.SECONDS);
 
-		return ResponseEntity.status(HttpStatus.OK).body(livrosService.listar());
+		return ResponseEntity.status(HttpStatus.OK).cacheControl(cacheControl).body(livrosService.listar());
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> salvar(@Valid @RequestBody Livro livro) {
 
 		livro = livrosService.salvar(livro);
+		
+		
 
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("{/id}").buildAndExpand(livro.getId()).toUri();
 
@@ -51,6 +57,8 @@ public class LivrosResources {
 	public ResponseEntity<Livro> buscar(@PathVariable Long id) {
 
 		Optional<Livro> livro = livrosRepository.findById(id);
+		
+		
 
 		if (livro.isEmpty()) {
 			return ResponseEntity.notFound().build();
